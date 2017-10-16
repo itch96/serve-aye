@@ -5,6 +5,20 @@ const User = mongoose.model('User');
 
 let secret = require('../config/secret');
 
+
+//---------Serialize & Deserialize---------
+passport.serializeUser((user, done) => {
+  done(null, user._id);
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(err, user);
+  });
+});
+
+
+//---------Middleware----------
 passport.use(
   new GoogleStrategy(
     {

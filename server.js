@@ -3,6 +3,8 @@
 const express = require('express');
 let app = express();
 const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
 
 
 //-------------FILES-----------------
@@ -17,10 +19,19 @@ mongoose.connect(secret.mongoURI, (err) => {
 });
 
 //----------MIDDLEWARES--------------
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [secret.cookieSessionKey]
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 //------------ROUTES---------------
 app.use(authRoutes);
+
 
 //------------LISTENING------------
 app.listen(secret.PORT, (err) => {
